@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
     <head>
-        <title>Beyond Browsing: API-Based Web Agents</title>
+        <title>VisualPuzzles: Decoupling Multimodal Reasoning Evaluation from Domain Knowledge</title>
         <link rel="icon" type="image/x-icon" href="/static/img/icons/web.png">
 
         <meta charset="utf-8">
@@ -10,8 +10,8 @@
         <!-- Open Graph -->
         <meta property="og:url" content="https://github.com/yueqis/API-Based-Agent" />
         <meta property="og:image" content="https://pangea.github.io/static/img/preview.png" />
-        <meta property="og:title" content="Beyond Browsing: API-Based Web Agents" />
-        <meta property="og:description" content="Beyond Browsing: API-Based Web Agents" />
+        <meta property="og:title" content="VisualPuzzles: Decoupling Multimodal Reasoning Evaluation from Domain Knowledge" />
+        <meta property="og:description" content="VisualPuzzles: Decoupling Multimodal Reasoning Evaluation from Domain Knowledge" />
         
         <!-- Twitter -->
         <meta name="twitter:url" content="https://github.com/yueqis/API-Based-Agent" />
@@ -109,29 +109,28 @@
         <div class="byline">
             <div class="byline-container">
                 <p>
-                    <a href="https://yueqis.github.io/" class="author-link" target="_blank">Yueqi Song</a> &emsp;
-                    <a href="https://frankxfz.me/" class="author-link" target="_blank">Frank Xu</a> &emsp;
-                    <a href="https://shuyanzhou.github.io/" class="author-link" target="_blank">Shuyan Zhou</a> &emsp;
+                    <a href="https://yueqis.github.io/" class="author-link" target="_blank">Yueqi Song*</a> &emsp;
+                    <a href="https://frankxfz.me/" class="author-link" target="_blank">Tianyue Ou*</a> &emsp;
+                    <a href="https://shuyanzhou.github.io/" class="author-link" target="_blank">Yibo Kong^</a> &emsp;
+                    <a href="https://shuyanzhou.github.io/" class="author-link" target="_blank">Zecheng Li^</a> &emsp;
                     <a href="https://www.phontron.com/" class="author-link" target="_blank">Graham Neubig</a>
+                    <a href="https://www.phontron.com/" class="author-link" target="_blank">Xiang Yue</a>
                     <p></p>
                     <a href="https://www.cs.cmu.edu/" class="affiliation-link" id="affiliation" target="_blank">Carnegie Mellon University</a>
                 </p>
             </div>
         </div>
         <p style="text-align: center;">
-            <span class="author-note">Corresponding to: {yueqis,gneubig}@cs.cmu.edu</span>
+            <span class="author-note">Corresponding to: {yueqis,gneubig,xyue2}@cs.cmu.edu</span>
         </p>
         
         <p class="text abstract">
 
-            Web browsers are a portal to the internet, where much of human activity is undertaken. 
-            Thus, there has been significant research work in AI agents that interact with the internet through web browsing.
-            However, there is also another interface designed specifically for machine interaction with online content: application programming interfaces (APIs).
-            In this paper we ask -- <strong>what if we were to take tasks traditionally tackled by browsing agents, and give AI agents access to APIs?</strong>
-            To do so, we propose two varieties of agents: (1) an API-calling agent that attempts to perform online tasks through APIs only, similar to traditional coding agents, and (2) a hybrid agent that can interact with online data through both web browsing and APIs.
-            In experiments on WebArena <d-cite key="zhou2023webarena"></d-cite>, a widely-used and realistic benchmark for web navigation tasks, we find that API-based agents outperform web browsing agents, as depicted in <a href="#fig:main">Figure 1</a>.
-            Hybrid agents outperform both others nearly uniformly across tasks, resulting in a more than 20.0% absolute improvement over web browsing alone, achieving a success rate of 35.8%.
-            These results strongly suggest that when APIs are available, they present an attractive alternative to relying on web browsing alone.
+           Current multimodal benchmarks often conflate reasoning with domain-specific knowledge, making it difficult to isolate and evaluate general reasoning abilities in non-expert settings. 
+To address this, we introduce VisualPuzzles, a benchmark that targets visual reasoning while deliberately minimizing reliance on specialized knowledge. 
+VisualPuzzles consists of diverse questions spanning five categories: algorithmic, analogical, deductive, inductive, and spatial reasoning. Experiments show that VisualPuzzles requires significantly less intensive domain-specific knowledge and more complex reasoning compared to benchmarks like MMMU, enabling us to better evaluate genuine multimodal reasoning.
+Evaluations show that state-of-the-art multimodal large language models consistently lag behind human performance on VisualPuzzles, and that strong performance on knowledge-intensive benchmarks does not necessarily translate to success on reasoning-focused, knowledge-light tasks.  
+Additionally, reasoning enhancements such as scaling up inference compute (with ``thinking'' modes) yield inconsistent gains across models and task types, and we observe no clear correlation between model size and performance. We also found that models exhibit different reasoning and answering patterns on VisualPuzzles compared to benchmarks with heavier emphasis on knowledge. VisualPuzzles offers a clearer lens through which to evaluate reasoning capabilities beyond factual recall and domain knowledge. 
         </p>
 
         <figure id="fig:main">
