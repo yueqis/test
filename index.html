@@ -1,123 +1,469 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>VISUALPUZZLES</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      max-width: 900px;
-      margin: auto;
-      padding: 2em;
-      background-color: #fdfdfd;
-    }
-    h1, h2, h3 {
-      color: #2c3e50;
-    }
-    .figure {
-      margin: 2em 0;
-    }
-    .figure img {
-      width: 100%;
-      height: auto;
-      border: 1px solid #ccc;
-    }
-    .caption {
-      font-size: 0.9em;
-      color: #555;
-      text-align: center;
-    }
-  </style>
-</head>
-<body>
+    <head>
+        <title>VisualPuzzles: Decoupling Multimodal Reasoning Evaluation from Domain Knowledge</title>
+        <link rel="icon" type="image/x-icon" href="./static/img/puzzle.png">
 
-<h1>VISUALPUZZLES</h1>
-<p><strong>Decoupling Multimodal Reasoning Evaluation from Domain Knowledge</strong></p>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<p><strong>Authors:</strong> Yueqi Song*, Tianyue Ou*, Yibo Kong†, Zecheng Li†, Graham Neubig, Xiang Yue</p>
-<p><strong>Institution:</strong> Carnegie Mellon University</p>
-<p><strong>Project Page:</strong> <a href="https://neulab.github.io/VisualPuzzles/">https://neulab.github.io/VisualPuzzles/</a></p>
+        <!-- Open Graph -->
+        <meta property="og:url" content="https://neulab.github.io/VisualPuzzles/" />
+        <meta property="og:image" content="https://neulab.github.io/VisualPuzzles/static/img/puzzle.png" />
+        <meta property="og:title" content="VisualPuzzles: Decoupling Multimodal Reasoning Evaluation from Domain Knowledge" />
+        <meta property="og:description" content="VisualPuzzles: Decoupling Multimodal Reasoning Evaluation from Domain Knowledge" />
+        
+        <!-- Twitter -->
+        <meta name="twitter:url" content="" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content="https://neulab.github.io/VisualPuzzles/static/img/puzzle.png" />
+        <meta name="twitter:title" content="VisualPuzzles: Decoupling Multimodal Reasoning Evaluation from Domain Knowledge" />
+        <meta name="twitter:description" content="We propose a new benchmark VisualPuzzles to decouple multimodal reasoning evaluation from domain-specific knowledge." />
+       
+        <script src="./static/js/distill_template.v2.js"></script>
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-<h2>Abstract</h2>
-<p>
-We introduce <strong>VISUALPUZZLES</strong>, a benchmark that evaluates visual reasoning ability independently of domain knowledge. It spans five categories—algorithmic, analogical, deductive, inductive, and spatial—and includes 1,168 questions sourced and curated to minimize factual knowledge reliance.
-</p>
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+        <script src="https://d3js.org/d3-collection.v1.min.js"></script>
+        <script src="https://rawgit.com/nstrayer/slid3r/master/dist/slid3r.js"></script>
 
-<div class="figure">
-  <div class="caption">Figure 1: Model accuracy compared to human performance on VISUALPUZZLES.</div>
+        <script defer="" src="./static/js/hider.js"></script>
+        <script src="./static/js/image_interact.js"></script>
+        <script src="./static/js/switch_videos.js"></script>
+
+        <link rel="stylesheet" href="./static/css/style.css">
+        <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+            onload="renderMathInElement(document.body);"></script>
+        <script defer src="./static/js/fontawesome.all.min.js"></script>
+
+
+        <!-- medium zoom https://github.com/francoischalifour/medium-zoom -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>  <!-- jquery -->
+        <script defer src="./static/js/medium-zoom.min.js"></script>
+        <script defer src="./static/js/zoom.js"></script>
+    </head>
+    <body>
+        <div class="header-wrapper">
+            <div class="header-container" id="header-container">
+                <div class="header-content">
+                    <div style="display: flex; align-items: center; gap: 0.75em; flex-wrap: nowrap;">
+                        <!-- <img src="./static/img/puzzle.png" alt="icon" style="height: 3.9em; width: auto"> -->
+                        <div style="white-space: nowrap;">
+                            <h1 style="display: inline; font-size: 3em; font-style: italic; margin: 0;">
+                                VisualPuzzles
+                              </h1>
+                              <span style="font-size: 2em; font-style: italic; font-weight: normal;">
+                                Decoupling Multimodal Reasoning Evaluation from Domain Knowledge
+                              </span>
+                        </div>
+                      </div><br>
+                        <div class="icon-container">
+                            <div class="icon-item">
+                                <img src="./static/img/benchmark.png" style="height: 3.5em; width: auto" alt="benchmark Icon">
+                                <div><strong>VisualPuzzles</strong>: a benchmark that targets visual reasoning while deliberately minimizing reliance on specialized knowledge. 
+                                    One major source of our questions is manually translated logical reasoning questions from the Chinese Civil Service Examination.<d-footnote><a href="https://en.wikipedia.org/wiki/Civil_service_of_the_People%27s_Republic_of_China#Examinations" target="_blank">Chinese Civil Service Examination</a> (Logic Test), 中国国家公务员考试行测（逻辑推理）</d-footnote> 
+                                    VisualPuzzles consists of 1168 diverse questions spanning five categories: algorithmic, analogical, deductive, inductive, and spatial reasoning. 
+                                    Each puzzle is labeled as easy, medium, or hard.
+                                </div>
+                            </div>
+                            <div class="icon-item">
+                                <img src="./static/img/thinking.png" style="height: 3.5em; width: auto" alt="reasoning Icon">
+                                <div><strong>Complex Reasoning</strong>: 
+                                    Humans outperform models on easy and medium tasks, while both degrade on harder ones. 
+                                    No current models surpasses even the 5th-percentile human performance.</div>
+                            </div>
+                            <div class="icon-item">
+                                <img src="./static/img/knowledge.png" style="height: 3.5em; width: auto" alt="knowledge Icon">
+                                <div><strong>Knowledge Light</strong>: Experiments show that VisualPuzzles is less knowledge-intensive than existing reasoning benchmarks, and models already possess the knowledge required to solve VisualPuzzles. 
+                                    Models possessing more knowledge does not strongly correlate better performance on VisualPuzzles.</div>
+                            </div>
+                            
+                        </div>
+
+                    <div class="button-container">
+                        <!-- replace arxiv -->
+                        <a href="" class="button paper-link" target="_blank">
+                            <span class="icon is-small">
+                                <i class="ai ai-arxiv"></i>
+                            </span>
+                            arXiv
+                        </a>
+                        <!-- replace pdf -->
+                        <a href="" class="button paper-link" target="_blank">
+                            <span class="icon is-small">
+                                <i class="fas fa-file-pdf"></i>
+                            </span>
+                            <span>pdf</span>
+                        </a>
+                        <!-- replace image -->
+                        <a href="https://huggingface.co/datasets/neulab/VisualPuzzles" class="button" target="_blank">
+                            <span class="icon is-small">
+                                <img src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg"
+                                     style="height: 1.2em; width: auto;">
+                            </span>
+                            <span>VisualPuzzles</span>
+                        </a>
+                        <a href="https://hub.zenoml.com/project/2e727b03-a677-451a-b714-f2c07ad2b49f/VisualPuzzles" class="button" target="_blank">
+                            <span class="icon is-small">
+                                <img src="./static/img/icons/zeno.png"
+                                     style="height: 1.2em; width: auto;">
+                            </span>
+                            <span>Model Outputs</span>
+                        </a>
+                        <a href="https://github.com/neulab/VisualPuzzles" class="button" target="_blank">
+                            <span class="icon is-small">
+                                <i class="fab fa-github"></i>
+                            </span>
+                            <span>Code</span>
+                        </a>
+                        <!-- <br> -->                      
+                    </div>
+                </div>
+                <div class="header-image">
+                    <img draggable="false" src="static/img/examples.png" alt="Teaser Image" class="teaser-image" style="width: 800px; max-width: 1000px; height: auto">
+                </div>
+            </div>
+        </div>
+    <d-article>
+        <div class="byline">
+            <div class="byline-container">
+                <p style="display: flex; flex-wrap: wrap; gap: 0.8em; align-items: center; justify-content: center;">
+                    <a href="https://yueqis.github.io/" class="author-link" target="_blank">Yueqi Song*</a> &emsp;
+                    <a href="https://oootttyyy.github.io/" class="author-link" target="_blank">Tianyue Ou*</a> &emsp;
+                    <a href="https://www.linkedin.com/in/yibo-kong-48b420235/" class="author-link" target="_blank">Yibo Kong†</a> &emsp;
+                    <a href="https://www.linkedin.com/in/zecheng-li-664536213/" class="author-link" target="_blank">Zecheng Li†</a> &emsp;
+                    <a href="https://www.phontron.com/" class="author-link" target="_blank">Graham Neubig</a> &emsp;
+                    <a href="https://xiangyue9607.github.io/" class="author-link" target="_blank">Xiang Yue</a> &emsp;
+                    <p></p>
+                    <a href="https://www.cs.cmu.edu/" class="affiliation-link" id="affiliation" target="_blank">Carnegie Mellon University</a>
+                </p>
+            </div>
+        </div>
+        <p style="text-align: center;">
+            <span class="author-note">Corresponding to: {yueqis,gneubig,xyue2}@cs.cmu.edu</span>
+        </p>
+        <div id='Overview' class="overview-block">
+            <h1 class="text">Overview</h1>
+        <p class="text abstract">
+
+           Current multimodal benchmarks often conflate reasoning with domain-specific knowledge, making it difficult to isolate and evaluate general reasoning abilities in non-expert settings. 
+           To address this, we introduce VisualPuzzles, a benchmark that targets visual reasoning while deliberately minimizing reliance on specialized knowledge. 
+           VisualPuzzles consists of diverse questions spanning five categories: algorithmic, analogical, deductive, inductive, and spatial reasoning. Experiments show that VisualPuzzles requires significantly less intensive domain-specific knowledge and more complex reasoning compared to benchmarks like MMMU, enabling us to better evaluate genuine multimodal reasoning.
+           Evaluations show that state-of-the-art multimodal large language models consistently lag behind human performance on VisualPuzzles, and that strong performance on knowledge-intensive benchmarks does not necessarily translate to success on reasoning-focused, knowledge-light tasks.  
+           Additionally, reasoning enhancements such as scaling up inference compute (with "thinking" modes) yield inconsistent gains across models and task types, and we observe no clear correlation between model size and performance. We also found that models exhibit different reasoning and answering patterns on VisualPuzzles compared to benchmarks with heavier emphasis on knowledge. VisualPuzzles offers a clearer lens through which to evaluate reasoning capabilities beyond factual recall and domain knowledge. 
+        </p>
+        <d-figure id="fig:teaser" style="display: flex; justify-content: center;">
+            <figure>
+                <img data-zoomable="" draggable="false" src="static/img/human_performance.png" alt="human_performance" style="width: 135%" class="center">
+                <figcaption style="width: 135%" >
+                    <strong>Figure 1:</strong> Model accuracy on VisualPuzzles compared to human performance percentiles. 
+                    All evaluated models fall below the human 5th percentile (57.5%), highlighting the difficulty of VisualPuzzles. 
+                    Interestingly, models with explicit "thinking" modes do not consistently outperform their base versions, suggesting that current reasoning strategies do not yet generalize well to VisualPuzzles's scenarios, even though these strategies have proven effective in existing reasoning tasks that often rely heavily on domain-specific knowledge.
+                </figcaption>
+            </figure>
+        </d-figure>
+        
+        <div id='Experiments' class="experiment-block">
+            <h1 class="text">Experimental Results</h1>
+            <h2>Leaderboard: VisualPuzzles with Chain of Thought (CoT)</h2>
+<div class="table-container">
+  <table class="leaderboard" style="width:100%; text-align:center; border-collapse: collapse;">
+    <thead>
+      <tr>
+        <th>Model</th>
+        <th>Algorithmic</th>
+        <th>Analogical</th>
+        <th>Deductive</th>
+        <th>Inductive</th>
+        <th>Spatial</th>
+        <th>Overall</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Baselines -->
+      <tr style="color: gray;">
+        <td><strong>Random Choice</strong></td>
+        <td>25.0</td><td>25.0</td><td>25.0</td><td>25.0</td><td>25.0</td><td>25.0</td>
+      </tr>
+      <tr>
+        <td><strong>Human (95th)</strong></td>
+        <td>100.0</td><td>100.0</td><td>100.0</td><td>81.6</td><td>100.0</td><td>89.3</td>
+      </tr>
+      <tr>
+        <td><strong>Human (50th)</strong></td>
+        <td>88.0</td><td>66.0</td><td>80.0</td><td>50.0</td><td>90.0</td><td>75.0</td>
+      </tr>
+      <tr>
+        <td><strong>Human (5th)</strong></td>
+        <td>68.1</td><td>25.0</td><td>37.0</td><td>0.0</td><td>59.1</td><td>57.5</td>
+      </tr>
+
+      <!-- Proprietary Models -->
+      <tr><td colspan="7" class="group-header"><em>Proprietary Models</em></td></tr>
+      <tr><td>o1</td><td>63.7</td><td>68.3</td><td>67.5</td><td>29.2</td><td>34.3</td><td>51.8</td></tr>
+      <tr><td>GPT-4o</td><td>49.2</td><td>58.3</td><td>49.0</td><td>27.3</td><td>26.2</td><td>41.3</td></tr>
+      <tr><td>Gemini-2.5-pro</td><td>60.0</td><td>64.0</td><td>60.0</td><td>29.7</td><td>36.4</td><td>49.5</td></tr>
+      <tr><td>Gemini-2.0-flash</td><td>55.3</td><td>58.8</td><td>57.0</td><td>24.4</td><td>31.8</td><td>45.0</td></tr>
+      <tr><td>Gemini-2.0-flash-thinking</td><td>46.6</td><td>70.1</td><td>49.0</td><td>24.9</td><td>25.5</td><td>42.2</td></tr>
+      <tr><td>Gemini-1.5-Pro</td><td>53.4</td><td>57.4</td><td>58.5</td><td>26.3</td><td>32.5</td><td>45.0</td></tr>
+      <tr><td>Claude-3.7-Sonnet</td><td>64.5</td><td>48.3</td><td>65.0</td><td>26.8</td><td>37.4</td><td>48.3</td></tr>
+      <tr><td>Claude-3.7-Sonnet-thinking</td><td>67.2</td><td>44.1</td><td>61.5</td><td>31.1</td><td>37.1</td><td>48.2</td></tr>
+      <tr><td>Claude-3.5-Sonnet</td><td>53.4</td><td>47.9</td><td>51.5</td><td>25.4</td><td>34.3</td><td>42.4</td></tr>
+
+      <!-- Open Models -->
+      <tr><td colspan="7" class="group-header"><em>Open Models</em></td></tr>
+      <tr><td>LLaVA-1.5-7B</td><td>23.3</td><td>21.8</td><td>36.0</td><td>20.6</td><td>19.2</td><td>23.7</td></tr>
+      <tr><td>LLaVA-1.5-13B</td><td>24.8</td><td>21.8</td><td>23.0</td><td>25.4</td><td>25.5</td><td>24.2</td></tr>
+      <tr><td>LLaVA-1.6-7B</td><td>27.5</td><td>23.7</td><td>30.0</td><td>22.5</td><td>21.3</td><td>24.8</td></tr>
+      <tr><td>LLaVA-1.6-13B</td><td>25.2</td><td>25.6</td><td>27.0</td><td>27.3</td><td>23.4</td><td>25.5</td></tr>
+      <tr><td>LLaVA-1.6-34B</td><td>29.4</td><td>28.0</td><td>43.0</td><td>24.9</td><td>25.5</td><td>29.7</td></tr>
+      <tr><td>LLaVA-OV-0.5B</td><td>21.0</td><td>26.1</td><td>30.5</td><td>22.5</td><td>25.2</td><td>24.8</td></tr>
+      <tr><td>LLaVA-OV-7B</td><td>27.9</td><td>26.1</td><td>36.5</td><td>23.4</td><td>25.5</td><td>27.7</td></tr>
+      <tr><td>LLaVA-OV-72B</td><td>34.7</td><td>26.5</td><td>37.0</td><td>27.3</td><td>28.7</td><td>30.8</td></tr>
+      <tr><td>Llama-3.2-11B-Vision-Instruct</td><td>31.0</td><td>30.8</td><td>39.0</td><td>21.1</td><td>26.2</td><td>29.4</td></tr>
+      <tr><td>Llama-3.2-90B-Vision-Instruct</td><td>45.0</td><td>23.2</td><td>43.0</td><td>26.3</td><td>31.5</td><td>34.1</td></tr>
+      <tr><td>Qwen-VL</td><td>21.4</td><td>31.3</td><td>25.0</td><td>26.3</td><td>24.1</td><td>25.3</td></tr>
+      <tr><td>Qwen2-VL-72B</td><td>41.6</td><td>28.4</td><td>39.5</td><td>22.5</td><td>29.0</td><td>32.4</td></tr>
+      <tr><td>QvQ-72B-Preview</td><td>43.1</td><td>45.5</td><td>48.0</td><td>27.3</td><td>27.6</td><td>37.8</td></tr>
+      <tr><td>Qwen2-VL-2B-Instruct</td><td>26.0</td><td>26.1</td><td>24.5</td><td>27.8</td><td>25.5</td><td>26.0</td></tr>
+      <tr><td>Qwen2-VL-7B-Instruct</td><td>36.3</td><td>21.8</td><td>38.5</td><td>20.6</td><td>22.7</td><td>27.9</td></tr>
+      <tr><td>Qwen2-VL-72B-Instruct</td><td>39.9</td><td>33.5</td><td>45.2</td><td>23.5</td><td>32.4</td><td>34.9</td></tr>
+      <tr><td>Qwen2.5-VL-3B-Instruct</td><td>35.1</td><td>27.5</td><td>44.5</td><td>25.8</td><td>24.8</td><td>31.2</td></tr>
+      <tr><td>Qwen2.5-VL-7B-Instruct</td><td>40.5</td><td>26.6</td><td>39.0</td><td>24.0</td><td>29.7</td><td>32.1</td></tr>
+      <tr><td>Qwen2.5-VL-72B-Instruct</td><td>53.4</td><td>46.9</td><td>58.0</td><td>25.8</td><td>29.5</td><td>42.3</td></tr>
+      <tr><td>Cambrian-8B</td><td>31.3</td><td>24.2</td><td>36.0</td><td>24.0</td><td>29.0</td><td>28.9</td></tr>
+      <tr><td>Cambrian-13B</td><td>24.8</td><td>25.6</td><td>39.5</td><td>24.4</td><td>21.0</td><td>26.5</td></tr>
+      <tr><td>Pangea-7B</td><td>30.5</td><td>28.9</td><td>35.0</td><td>24.4</td><td>25.2</td><td>28.6</td></tr>
+    </tbody>
+  </table>
 </div>
 
-<h2>Example Questions</h2>
-<p>VISUALPUZZLES covers five reasoning types. Below are sample questions from each category.</p>
+            
+            <p class="text">
+                Here, we provide a detailed analysis of the API support for various websites used in the WebArena tasks, categorized into three levels: good, fair, and poor. 
+                The availability, functionality, and documentation of APIs, as described in <a href="#tab:quality">Table 1</a>, play a crucial role in the efficiency and flexibility of our agents.
+            </p>    
+            <p class="text">
+                <strong>Good API support:</strong> Gitlab and Map demonstrates good API support, since they provide significant coverage for the tasks in WebArena and maintain good API documentation.
+            </p>
+            <p class="text">
+                <strong>Fair API support:</strong> The Shopping and Shopping Admin websites provide a reasonable level of support for common shopping tasks such as managing products, categories, and customer accounts, while some features are absent, such as the ability to add items to a wish list. The API documentation is fairly detailed and covers most core functionalities.
+            </p>
+            <p class="text">
+                <strong>Poort API support:</strong> The Reddit tasks in WebArena are based on a self-hosted limited clone of the <a href="https://codeberg.org/Postmill/Postmill" target="_blank">Reddit website</a>, with limited functionalities as compared to the official site. It offers no API documentation, making it the least API-friendly website in the benchmark.
+            </p>
 
-<div class="figure">
-  <div class="caption">Figure 2: Example instances from each reasoning category.</div>
-</div>
+            <h3 class="text">Evaluation Framework</h3>
+            <p class="text">
+                We employed OpenHands as our primary evaluation framework for developing and testing our agents, as it is an open-source platform designed for creating AI agents that interact with both software and web environments <d-cite key="wang2024opendevin"></d-cite>. 
+                OpenHands supports a variety of agent interfaces, allowing agents to execute actions while maintaining a detailed record of past steps. 
+                For coding tasks, it incorporates CodeAct <d-cite key="wang2024executable"></d-cite>, providing a sandboxed bash environment and Jupyter IPython capabilities. 
+                Additionally, OpenHands includes a web navigation agent using BrowserGym, which operates within a Chromium web browser powered by Playwright <d-cite key="workarena2024"></d-cite>. 
+                However, a limitation is that existing agents within OpenHands are specialized either in web browsing or coding/API-based interactions, but not both. 
+                To address this, we developed two new agents: an API-based agent that leverages the CodeAct framework and specialized instructions for API usage, and a hybrid agent that integrates web browsing functionalities with API calls. 
+                The hybrid agent dynamically selects between browsing actions and API calls based on task requirements, leveraging the current browser state, prior actions, and action outcomes. 
+                All agents use GPT-4o as the base large language model.
+            </p>
 
-<h2>Key Findings</h2>
-<ul>
-  <li><strong>Human-Machine Gap:</strong> Even the best models fall below the 5th percentile of human performance.</li>
-  <li><strong>Reasoning ≠ Knowledge:</strong> VISUALPUZZLES isolates reasoning from domain knowledge, unlike benchmarks like MMMU.</li>
-  <li><strong>Size Isn’t Everything:</strong> Larger models don’t always perform better on reasoning-heavy tasks.</li>
-</ul>
+        </div>
 
-<h2>Benchmark Design</h2>
-<p>
-The benchmark is constructed with minimal domain-specific knowledge requirements, and each question is annotated with a reasoning category and a difficulty level (easy, medium, hard).
-</p>
+        <div id='result' class="result-block">
+            <h1 class="text">Results</h1>
+            <div id="main-results" style="display: flex; flex-direction: column; align-items: center;" class="figure">
+                <div class="table-container">
+                    <table class="data-table" style="border-collapse: collapse; width: 100%; text-align: center;">
+                        <thead>
+                            <tr>
+                                <th style="border: 1px solid #000; padding: 8px;">Agents</th>
+                                <th style="border: 1px solid #000; padding: 8px;">Gitlab</th>
+                                <th style="border: 1px solid #000; padding: 8px;">Map</th>
+                                <th style="border: 1px solid #000; padding: 8px;">Shopping</th>
+                                <th style="border: 1px solid #000; padding: 8px;">Admin</th>
+                                <th style="border: 1px solid #000; padding: 8px;">Reddit</th>
+                                <th style="border: 1px solid #000; padding: 8px;">Multi</th>
+                                <th style="border: 1px solid #000; padding: 8px;">AVG.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 8px;">WebArena Base</td>
+                                <td style="border: 1px solid #000; padding: 8px;">15.0</td>
+                                <td style="border: 1px solid #000; padding: 8px;">15.6</td>
+                                <td style="border: 1px solid #000; padding: 8px;">13.9</td>
+                                <td style="border: 1px solid #000; padding: 8px;">10.4</td>
+                                <td style="border: 1px solid #000; padding: 8px;">6.6</td>
+                                <td style="border: 1px solid #000; padding: 8px;">8.3</td>
+                                <td style="border: 1px solid #000; padding: 8px;">12.3</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 8px;">AutoEval</td>
+                                <td style="border: 1px solid #000; padding: 8px;">25.0</td>
+                                <td style="border: 1px solid #000; padding: 8px;">27.5</td>
+                                <td style="border: 1px solid #000; padding: 8px;">39.6</td>
+                                <td style="border: 1px solid #000; padding: 8px;">20.9</td>
+                                <td style="border: 1px solid #000; padding: 8px;">20.8</td>
+                                <td style="border: 1px solid #000; padding: 8px;">16.7</td>
+                                <td style="border: 1px solid #000; padding: 8px;">26.9</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 8px;">AWM</td>
+                                <td style="border: 1px solid #000; padding: 8px;">35.0</td>
+                                <td style="border: 1px solid #000; padding: 8px;">42.2</td>
+                                <td style="border: 1px solid #000; padding: 8px;">32.1</td>
+                                <td style="border: 1px solid #000; padding: 8px;">29.1</td>
+                                <td style="border: 1px solid #000; padding: 8px;">54.7</td>
+                                <td style="border: 1px solid #000; padding: 8px;"><strong>18.8</strong></td>
+                                <td style="border: 1px solid #000; padding: 8px;">35.5</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 8px;">SteP</td>
+                                <td style="border: 1px solid #000; padding: 8px;">32.2</td>
+                                <td style="border: 1px solid #000; padding: 8px;">31.2</td>
+                                <td style="border: 1px solid #000; padding: 8px;"><strong>50.8</strong></td>
+                                <td style="border: 1px solid #000; padding: 8px;">23.6</td>
+                                <td style="border: 1px solid #000; padding: 8px;"><strong>57.5</strong></td>
+                                <td style="border: 1px solid #000; padding: 8px;">10.4</td>
+                                <td style="border: 1px solid #000; padding: 8px;"><strong>36.5</strong></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 8px;">Browsing Agent</td>
+                                <td style="border: 1px solid #000; padding: 8px;">12.8</td>
+                                <td style="border: 1px solid #000; padding: 8px;">20.2</td>
+                                <td style="border: 1px solid #000; padding: 8px;">10.2</td>
+                                <td style="border: 1px solid #000; padding: 8px;">22.0</td>
+                                <td style="border: 1px solid #000; padding: 8px;">10.4</td>
+                                <td style="border: 1px solid #000; padding: 8px;">10.4</td>
+                                <td style="border: 1px solid #000; padding: 8px;">14.8</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 8px;">API-Based Agent</td>
+                                <td style="border: 1px solid #000; padding: 8px;">43.9</td>
+                                <td style="border: 1px solid #000; padding: 8px;">45.4</td>
+                                <td style="border: 1px solid #000; padding: 8px;">25.1</td>
+                                <td style="border: 1px solid #000; padding: 8px;">20.3</td>
+                                <td style="border: 1px solid #000; padding: 8px;">18.9</td>
+                                <td style="border: 1px solid #000; padding: 8px;">8.3</td>
+                                <td style="border: 1px solid #000; padding: 8px;">29.2</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #000; padding: 8px;">Hybrid Agent</td>
+                                <td style="border: 1px solid #000; padding: 8px;"><strong>44.4</strong></td>
+                                <td style="border: 1px solid #000; padding: 8px;"><strong>45.9</strong></td>
+                                <td style="border: 1px solid #000; padding: 8px;">25.7</td>
+                                <td style="border: 1px solid #000; padding: 8px;"><strong>41.2</strong></td>
+                                <td style="border: 1px solid #000; padding: 8px;">28.3</td>
+                                <td style="border: 1px solid #000; padding: 8px;">16.7</td>
+                                <td style="border: 1px solid #000; padding: 8px;">35.8</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>            
+            <figcaption style="text-align: center; width: 100%;">
+                Table 2: Performance of Agents across WebArena Websites. Note that SteP uses prompts inspired specifically by WebArena test set tasks, while other methods are task-agnostic. We achieve the highest performance among the task-agnostic agents.
+            </figcaption>
+            <p class="text">
+                The main results, shown in <a href="#main-results">Table 2</a>, highlight the performance of agents across websites in the WebArena benchmark. 
+                The API-Based Agent performed consistently well, achieving higher scores than the Browsing Agent due to its optimized API-calling capabilities, allowing it to efficiently complete tasks with minimal web browsing. 
+                The Browsing Agent, focused solely on navigating web interfaces, struggled in most domains. 
+                The Hybrid Agent, which integrates both API calling and web browsing, outperformed the API-Based and the Browsing agents in all categories. 
+                Its ability to switch dynamically between API and web interactions provided flexibility, enabling higher performance even in cases where APIs were incomplete or unavailable. 
+                By combining both approaches, the hybrid agent ensures success in situations where API-only methods fall short, using web browsing as a necessary backup.
+                Therefore, the hybrid agent achieves sota performance among agents that are task-agnostic.
+            </p>
 
-<h3>Dataset Statistics</h3>
-<ul>
-  <li>Algorithmic: 262</li>
-  <li>Analogical: 211</li>
-  <li>Deductive: 200</li>
-  <li>Inductive: 209</li>
-  <li>Spatial: 286</li>
-</ul>
+            <h3 class="text">Does API Quality Matter?</h3>
+            <p class="text">
+                The short answer is yes, API quality does significantly impact the performance of the API-based agent.
+                High-quality APIs, with comprehensive, well-documented endpoints, enable efficient and accurate task execution. 
+                This allows the API-based agent to rely on fewer web browsing actions, while hybrid agents can switch more flexibly between methods. 
+                Websites like Gitlab and Map, which offer robust APIs, result in the highest task completion accuracy. 
+                Conversely, low-quality APIs hinder agent performance, forcing hybrid agents to rely more on web browsing. 
+                For instance, on Reddit, the initial API-based agent struggled due to limited API availability. 
+                After manually introducing additional APIs, performance improved from 9.43% to 18.9%, highlighting the importance of thorough API support.
+            </p>
 
-<h2>Performance Comparison</h2>
+            <figure id="fig:case1">
+                <img data-zoomable="" draggable="false" src="static/img/case1.png" alt="case1" style="width: 60%" class="center">
+                <figcaption>
+                    <strong>Figure 4:</strong> Case 1: the hybrid agent succeeds while the browsing agent and API-based agent both fail
+                </figcaption>
+            </figure> 
+            <h3 class="text">Case Study 1</h3>
+            <p class="text">
+                One example where the hybrid agent succeeded, while both the API-based and browsing agents failed, involved a task from the Shopping Admin domain. 
+                The query was to "delete all negative reviews for Sybil running short," a product listed in the shopping admin interface. 
+                In this instance, the API-based agent failed because no relevant API endpoints were available for retrieving or deleting reviews. 
+                Similarly, the browsing agent failed, as completing this task purely through web navigation required too many steps, as depicted in <a href="#fig:case1">Figure 4</a>. 
+                This complexity made the task challenging for an agent relying solely on web interactions.
+                However, the hybrid agent successfully completed the task by leveraging both API and browsing functionalities. An example trace of the hybrid agent shown in Figure <a href="#fig:case1">Figure 4</a>.
+                This case highlights the hybrid agent's ability to efficiently combine API calls with web interactions, allowing it to tackle complex multi-step tasks that would be difficult or impossible for solely browsing or solely API-based agents.
+            </p>
+            
+            <figure id="fig:case2">
+                <img data-zoomable="" draggable="false" src="static/img/case2.png" alt="case2" style="width: 60%" class="center">
+                <figcaption>
+                    <strong>Figure 5:</strong> Case 2: the API-based agent succeeds while the browsing agent and the hybrid agent fails.
+                </figcaption>
+            </figure> 
 
-<div class="figure">
-  <div class="caption">Figure 3: Reasoning vs. Knowledge accuracy by model size.</div>
-</div>
+            <h3 class="text">Case Study 2</h3>
+            <p class="text">
+                Conversely, there are instances where the API-based agent outperforms the hybrid agent. 
+                One such case occurred in the GitLab website, where the task was to "tell me the email address of the contributor who has the most commits to <code>ai</code>". 
+                The API-based agent successfully completed this task by utilizing the <code>GET /api/{id}/contributors</code> API endpoint to retrieve the contributor with the highest number of commits and their associated email address.
+                On the other hand, the hybrid agent attempted to solve the task through browsing but encountered significant challenges. Accessing this information through web browsing required navigating GitLab's interface, locating the correct repository and branch, and identifying the top contributor manually, a task that might be too difficult to perform through web navigation alone. 
+                As a result, both the browsing agent and the hybrid agent failed to complete the task. This case demonstrates an example where API access provides a more straightforward solution than browsing in contexts requiring structured data retrieval.
+            </p>
+        </div>
 
-<h3>Disentangling Knowledge</h3>
-<p>
-GPT-4o was prompted to generate knowledge checklists to verify the reasoning independence of VISUALPUZZLES. Results confirm a significantly lower dependence on domain-specific knowledge compared to benchmarks like MMMU.
-</p>
+    </div>
 
-<h3>Reasoning Complexity</h3>
-<p>
-VISUALPUZZLES questions contain more logical reasoning steps on average than those from MMMU, indicating its higher cognitive demand.
-</p>
+        <div id="conclusion" style="position: relative; margin-top: 40px; margin-bottom: 0px;">
+            <h2 class="text" style="margin-top:0px; margin-bottom:10px">Conclusion</h2>
+            <p class="text">
+                We propose new web agents that use APIs instead of traditionally browsers. 
+                We found that API-based agents outperform browsing-based counterparts, especially on websites with sufficient API support. 
+                Hence we further propose an agent that is capable of switching between using APIs or browsers and empirically outperforms agents that only uses one of the two interfaces. 
+                For future work, we aim to explore methods for automatically inducing APIs using techniques such as Agent Workflow Memory (AWM) <d-cite key="wang2024agent"></d-cite>. 
+                These methods could identify and generate API calls for websites lacking formal API support, further expanding the applicability and efficiency of API-based approaches. 
+                By automating the discovery and utilization of APIs, we envision even more robust agents capable of handling diverse web tasks with minimal reliance on manual interaction through browsing.
+            </p>
+        </div>
 
-<div class="figure">
-  <div class="caption">Figure 4: Accuracy and response length comparison of reasoning models vs. baselines.</div>
-</div>
+        <div id="acknowledgement" style="position: relative; margin-top: 40px; margin-bottom: 0px;">
+            <h2 class="text" style="margin-top:0px; margin-bottom:10px">Acknowledgement</h2>
+            <p class="text">
+                This work was supported in part by a grant from DSTA Singapore.  
+                The authors would like to thank CMU NeuLab colleagues for their constructive comments. 
+                The authors would like to thank Cambrian team for their <a href="https://cambrian-mllm.github.io/" target="_blank">project webpage template</a>. 
+            </p>
+        </div>
 
-<h2>Reasoning Patterns and Error Analysis</h2>
+        </d-article>
+        <d-appendix>
+            <h3>BibTeX</h3>
+            <p class="bibtex">
+                @article{song2024browsingapibasedwebagents,<br>
+                &nbsp;&nbsp;title={VisualPuzzles: Decoupling Multimodal Reasoning Evaluation from Domain Knowledge},<br>
+                &nbsp;&nbsp;author={Yueqi Song and Tianyue Ou and Yibo Kong and Zecheng Li and Graham Neubig and Xiang Yue},<br>
+                &nbsp;&nbsp;journal={arXiv preprint arXiv:2410.16464},<br>
+                &nbsp;&nbsp;year={2024},<br>
+                &nbsp;&nbsp;url={https://arxiv.org/abs/2410.16464}<br>
+                }
+            </p>
 
-<div class="figure">
-  <div class="caption">Figure 5: Reasoning patterns on VISUALPUZZLES vs. MMMU.</div>
-</div>
-
-<div class="figure">
-  <div class="caption">Figure 6: Example of branching reasoning on a spatial task.</div>
-</div>
-
-<div class="figure">
-  <div class="caption">Figure 8: Error type distribution in Claude-3.7-Sonnet-Thinking.</div>
-</div>
-
-<h2>Conclusion</h2>
-<p>
-VISUALPUZZLES offers a fresh lens for evaluating multimodal reasoning. It highlights the gap between domain knowledge and reasoning ability, revealing that current MLLMs still struggle with general-purpose reasoning—especially under limited knowledge conditions. We hope VISUALPUZZLES will guide the next wave of models toward better abstraction and inference capabilities.
-</p>
-
-<hr>
-<p><small>*Equal Contribution &nbsp;|&nbsp; †Equal Contribution</small></p>
-
-</body>
+            <d-footnote-list></d-footnote-list>
+            <d-citation-list></d-citation-list>
+        </d-appendix>   
+        <!-- bibliography will be inlined during Distill pipeline's pre-rendering -->
+        <d-bibliography src="bibliography.bib"></d-bibliography>
+        <script src="./static/js/nav-bar.js"></script>
+    </body>
 </html>
